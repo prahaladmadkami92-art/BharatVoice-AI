@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #080d18;
+    color: #f1f5f9;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    padding: 22px 18px;
+    text-align: center;
+    background: #0d1525;
+    border-bottom: 1px solid #26344d;
+}
+
+header h1 {
+    font-size: 25px;
+    color: #ffffff;
+}
+
+header p {
+    margin-top: 8px;
+    color: #94a3b8;
+}
+
+.container {
+    width: min(92%, 650px);
+    margin: 35px auto;
+    padding: 28px;
+    background: #111c30;
+    border: 1px solid #293b58;
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+}
+
+.container h2 {
+    margin-bottom: 22px;
+    color: #60a5fa;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin: 19px 0 9px;
+    color: #dbeafe;
+    font-weight: bold;
+}
+
+textarea,
+select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #354968;
+    border-radius: 11px;
+    background: #091426;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+}
+
+textarea {
+    min-height: 145px;
+    resize: vertical;
+}
+
+textarea:focus,
+select:focus {
+    border-color: #3b9cff;
+    box-shadow: 0 0 0 3px rgba(59, 156, 255, 0.15);
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #38a3ff;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+button {
+    flex: 1;
+    padding: 15px 10px;
+    border: none;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #1677ff, #35b8ff);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+#stop {
+    background: linear-gradient(135deg, #b83245, #ed5265);
+}
+
+#status,
+#voiceInfo {
+    margin-top: 18px;
+    text-align: center;
+    color: #7dd3fc;
+    line-height: 1.5;
+}
+
+footer {
+    padding: 25px 12px;
+    color: #8292aa;
+    text-align: center;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        margin: 22px auto;
+    }
+
+    header h1 {
+        font-size: 22px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+}
+
+#charCount {
+    margin-top: 8px;
+    text-align: right;
+    color: #60a5fa;
+    font-size: 13px;
+}
+
+#clearText {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    background: #263b59;
+    border: 1px solid #3b82f6;
+    color: #dbeafe;
+    border-radius: 10px;
+}

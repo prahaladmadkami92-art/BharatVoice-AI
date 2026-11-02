@@ -1,0 +1,8 @@
+.env
+node_modules/
+__pycache__/
+*.pyc
+*.wav
+*.backup*
+*.before-*
+.DS_Store

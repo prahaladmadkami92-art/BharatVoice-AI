@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BharatVoice AI Pro - Voice Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>🇮🇳 BharatVoice AI Pro</h1>
+    <p>Give Your Words a Natural Human Voice</p>
+</header>
+
+<main class="container">
+    <h2>AI Voice Generator</h2>
+
+    <label for="text">Enter Your Text</label>
+    <textarea id="text" placeholder="Type or paste your text here..." maxlength="5000"></textarea>
+    <button id="clearText" type="button">✖ Clear Text</button>
+    <p id="charCount">Characters: 0</p>
+
+    <label for="language">Select Language</label>
+    <select id="language">
+        <option value="en-IN">English (India)</option>
+        <option value="en-US">English (US)</option>
+        <option value="hi-IN">Hindi</option>
+        <option value="or-IN">Odia</option>
+        <option value="bn-IN">Bengali</option>
+        <option value="ta-IN">Tamil</option>
+        <option value="te-IN">Telugu</option>
+        <option value="pa-IN">Punjabi</option>
+        <option value="mr-IN">Marathi</option>
+        <option value="gu-IN">Gujarati</option>
+        <option value="ml-IN">Malayalam</option>
+        <option value="kn-IN">Kannada</option>
+        <option value="as-IN">Assamese</option>
+        <option value="ur-IN">Urdu</option>
+        <option value="ks-IN">Kashmiri</option>
+        <option value="sd-IN">Sindhi</option>
+        <option value="ne-NP">Nepali</option>
+        <option value="kok-IN">Konkani</option>
+        <option value="sa-IN">Sanskrit</option>
+        <option value="mni-IN">Manipuri</option>
+        <option value="brx-IN">Bodo</option>
+        <option value="doi-IN">Dogri</option>
+        <option value="sat-IN">Santali</option>
+        <option value="mai-IN">Maithili</option>
+    </select>
+
+    <label>Voice: Male</label>
+    <input type="hidden" id="gender" value="male">
+
+    <label for="speed">Speaking Speed</label>
+    <input id="speed" type="range" min="0.7" max="1.3" step="0.1" value="0.9">
+    <p id="speedValue">Speed: 0.9x</p>
+
+    <div class="buttons">
+        <button id="preview" type="button">🔊 Preview Voice</button>
+        <button id="generate">▶ Generate Voice</button>
+        <button id="stop">■ Stop Voice</button>
+        <button id="download" type="button">⬇ Download Audio</button>
+    </div>
+
+    <p id="status">Ready to generate your voice.</p>
+    <p id="voiceInfo"></p>
+</main>
+
+<footer>
+    <p>© 2026 BharatVoice AI Pro | Made in India 🇮🇳</p>
+</footer>
+
+<script src="voice.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
+
+
