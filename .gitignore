@@ -6,3 +6,4 @@ __pycache__/
 *.backup*
 *.before-*
 .DS_Store
+sarvam_test.py
