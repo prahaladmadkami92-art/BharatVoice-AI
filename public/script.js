@@ -21,13 +21,21 @@ const stopBtn = document.getElementById("stop");
 const previewBtn = document.getElementById("preview");
 
 let voices = [];
+const speechSupported =
+    "speechSynthesis" in window &&
+    "SpeechSynthesisUtterance" in window;
 
 function loadVoices() {
+    if (!speechSupported) return;
     voices = window.speechSynthesis.getVoices();
 }
 
-loadVoices();
-window.speechSynthesis.onvoiceschanged = loadVoices;
+if (speechSupported) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+} else {
+    statusText.textContent = "Browser voice support unavailable.";
+}
 
 generateBtn.addEventListener("click", speak);
 
