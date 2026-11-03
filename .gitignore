@@ -7,3 +7,8 @@ __pycache__/
 *.before-*
 .DS_Store
 sarvam_test.py
+
+# Android release signing files
+*.jks
+*.keystore
+local.properties

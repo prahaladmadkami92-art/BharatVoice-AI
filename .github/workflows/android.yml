@@ -7,6 +7,9 @@ on:
       - 'android-app/**'
       - '.github/workflows/android.yml'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,11 +29,26 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build APK
-        run: gradle -p android-app :app:assembleDebug
+      - name: Decode signing key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          mkdir -p android-app/app
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android-app/app/release-key.jks
 
-      - name: Upload APK
+      - name: Build signed Release APK
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle -p android-app :app:assembleRelease
+
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: BharatVoice-AI-APK
-          path: android-app/app/build/outputs/apk/debug/app-debug.apk
+          name: BharatVoice-AI-Release-APK
+          path: android-app/app/build/outputs/apk/release/app-release.apk
+
+      - name: Remove signing key
+        if: always()
+        run: rm -f android-app/app/release-key.jks
