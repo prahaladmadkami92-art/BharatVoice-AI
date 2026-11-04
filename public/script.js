@@ -91,32 +91,67 @@ speedInput.addEventListener("input", () => {
 });
 
 
-previewBtn.addEventListener("click", () => {
+let previewAudio = null;
+let previewObjectUrl = null;
+
+previewBtn.addEventListener("click", async () => {
     const sampleText = textInput.value.trim().slice(0, 80) || "Hello! This is a voice preview.";
 
-    window.speechSynthesis.cancel();
+    previewBtn.disabled = true;
+    statusText.textContent = "Generating voice preview...";
 
-    const previewMessage = createVoice(
-        sampleText,
-        languageInput.value,
-        genderInput.value,
-        speedInput.value,
-        voices
-    );
+    try {
+        window.speechSynthesis.cancel();
 
-    previewMessage.onstart = () => {
+        if (previewAudio) {
+            previewAudio.pause();
+            previewAudio = null;
+        }
+
+        if (previewObjectUrl) {
+            URL.revokeObjectURL(previewObjectUrl);
+            previewObjectUrl = null;
+        }
+
+        const response = await fetch("/api/preview", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                text: sampleText,
+                language: languageInput.value,
+                gender: genderInput.value
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("Preview generation failed");
+        }
+
+        const blob = await response.blob();
+        previewObjectUrl = URL.createObjectURL(blob);
+        previewAudio = new Audio(previewObjectUrl);
+
+        previewAudio.onended = () => {
+            statusText.textContent = "Voice preview completed!";
+            URL.revokeObjectURL(previewObjectUrl);
+            previewObjectUrl = null;
+        };
+
+        previewAudio.onerror = () => {
+            statusText.textContent = "Preview playback error.";
+            if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+            previewObjectUrl = null;
+        };
+
         statusText.textContent = "Preview speaking...";
-    };
+        await previewAudio.play();
 
-    previewMessage.onend = () => {
-        statusText.textContent = "Voice preview completed!";
-    };
-
-    previewMessage.onerror = () => {
+    } catch (error) {
+        console.error("Preview error:", error);
         statusText.textContent = "Preview error. Please try again.";
-    };
-
-    window.speechSynthesis.speak(previewMessage);
+    } finally {
+        previewBtn.disabled = false;
+    }
 });
 const downloadBtn = document.getElementById("download");
 
@@ -149,7 +184,9 @@ downloadBtn.addEventListener("click", async () => {
         const link = document.createElement("a");
 
         link.href = url;
-        link.download = "BharatVoice-AI.wav";
+        link.download = languageInput.value === "hi-IN"
+            ? "BharatVoice-AI.mp3"
+            : "BharatVoice-AI.wav";
         link.click();
 
         URL.revokeObjectURL(url);

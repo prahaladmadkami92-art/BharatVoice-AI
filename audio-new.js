@@ -41,6 +41,15 @@ function runPython(args) {
     });
 }
 
+function runEdgeTTS(args) {
+    return new Promise((resolve, reject) => {
+        execFile("edge-tts", args, { timeout: 120000 }, error => {
+            if (error) reject(error);
+            else resolve();
+        });
+    });
+}
+
 function pauseFor(segment) {
     const mark = segment.slice(-1);
 
@@ -121,13 +130,17 @@ function generateAudio(text, outputFile, language, gender) {
 
         try {
             if (language === "hi-IN") {
-                const result = await generateHindiAudio(
-                    text,
-                    outputFile,
-                    voice
-                );
+                const selectedVoice = gender === "female"
+                    ? "hi-IN-SwaraNeural"
+                    : "hi-IN-MadhurNeural";
 
-                return resolve(result);
+                await runEdgeTTS([
+                    "--voice", selectedVoice,
+                    "--text", text,
+                    "--write-media", outputFile
+                ]);
+
+                return resolve(outputFile);
             }
 
             await runEspeak([

@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
 app.post("/api/download", async (req, res) => {
     try {
         const text = req.body.text;
+        console.log("VOICE DEBUG:", "Language =", req.body.language, "Gender =", req.body.gender);
 
         if (!text || !text.trim()) {
             return res.status(400).json({
@@ -34,7 +35,8 @@ app.post("/api/download", async (req, res) => {
             });
         }
 
-        const filename = "bharatvoice-" + Date.now() + ".wav";
+        const extension = req.body.language === "hi-IN" ? "mp3" : "wav";
+        const filename = "bharatvoice-" + Date.now() + "." + extension;
         const outputFile = path.join(__dirname, filename);
 
         await generateAudio(text, outputFile, req.body.language, req.body.gender);
@@ -53,6 +55,53 @@ app.post("/api/download", async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Audio generation failed"
+        });
+    }
+});
+
+
+// Audio Preview API
+app.post("/api/preview", async (req, res) => {
+    const fs = require("fs");
+    let outputFile;
+
+    try {
+        const { text, language, gender } = req.body;
+        console.log("PREVIEW DEBUG:", "Language =", language, "Gender =", gender);
+
+        if (!text || !text.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter some text"
+            });
+        }
+
+        if (text.length > 5000) {
+            return res.status(400).json({
+                success: false,
+                message: "Maximum 5000 characters allowed"
+            });
+        }
+
+        const extension = language === "hi-IN" ? "mp3" : "wav";
+        const filename = "bharatvoice-preview-" + Date.now() + "." + extension;
+        outputFile = path.join(__dirname, filename);
+
+        await generateAudio(text, outputFile, language, gender);
+
+        res.sendFile(outputFile, {
+            headers: { "Cache-Control": "no-store" }
+        }, (error) => {
+            fs.unlink(outputFile, () => {});
+            if (error) console.error("Preview send error:", error.message);
+        });
+
+    } catch (error) {
+        if (outputFile) fs.unlink(outputFile, () => {});
+        console.error("Preview error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Audio preview failed"
         });
     }
 });
