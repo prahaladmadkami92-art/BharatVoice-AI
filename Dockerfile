@@ -1,6 +1,6 @@
 FROM node:22-bookworm-slim
 
-RUN apt-get update && apt-get install -y python3 python3-venv \
+RUN apt-get update && apt-get install -y python3 python3-venv espeak \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m venv /opt/venv
