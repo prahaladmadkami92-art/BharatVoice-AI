@@ -1,20 +1,20 @@
 FROM node:22-bookworm-slim
 
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python-is-python3 \
-    espeak \
+RUN apt-get update && apt-get install -y python3 python3-venv \
     && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+RUN pip install --no-cache-dir edge-tts
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 COPY . .
 
-ENV NODE_ENV=production
-
 EXPOSE 8080
 
-CMD ["npm", "start"]
+CMD ["npm", "start"]0
